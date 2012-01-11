@@ -26,10 +26,10 @@ public class Fractal extends View {
 
   private float prevX, prevY;
   private float oldDist;
-	
+  
   public enum TouchState { NONE, DRAG, ZOOM };
   private TouchState touchState = TouchState.NONE;
-	
+  
   private double xCenter = -0.7, yCenter = 0.0, magnification = 1.0;
   private double pixelX, pixelY;
   private static final int iterationLowerLimit = 128;
@@ -56,17 +56,17 @@ public class Fractal extends View {
         prevY = event.getY();
         touchState = TouchState.DRAG;
         break;
-		   
+       
       case MotionEvent.ACTION_UP:
       case MotionEvent.ACTION_POINTER_UP:
         touchState = TouchState.NONE;
         break;
-			
+      
       case MotionEvent.ACTION_POINTER_DOWN:
         oldDist = spacing(event);
         if (oldDist > 10f) {
           touchState = TouchState.ZOOM;
-        }	
+        }  
         break;
 
       case MotionEvent.ACTION_MOVE:
@@ -83,19 +83,19 @@ public class Fractal extends View {
               magnification *= 0.5;
               iterationMax = Math.max(iterationMax >> 1, iterationLowerLimit);
             }
-          }		    	
+          }          
         }
         invalidate();
         break;
     }
 
     return true;
-  }	
-	
+  }  
+  
   @Override
   protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
-		
+    
     int width = canvas.getWidth();
     int height = canvas.getHeight();
     int[] colors = new int[width * height];
@@ -108,7 +108,7 @@ public class Fractal extends View {
     pixelY = deltaY / height;
 
     setupColorMapping();
-		
+    
     long now = System.currentTimeMillis();
     for (int i = 0; i < height; ++i) {
       for (int j = 0; j < width; ++j) {
@@ -120,18 +120,18 @@ public class Fractal extends View {
       }
     }
     double timeDiff = (System.currentTimeMillis() - now) / 1000.0;
-		
+    
     canvas.drawBitmap(colors, 0, width, 0.0f, 0.0f, width, height, false, null);
-				
+        
     Log.v(TAG, "Used " + timeDiff + " seconds per draw.");
   }
-	
+  
   // Correct Java % behavior: returns negative when dividend is negative.
   private int mod(int a, int b) {
     int r = a % b;
     return (r < 0) ? r + b : r;
   }
-	
+  
   private void setupColorMapping() {
     // Gradient according to the parameter file shown in
     //   http://en.wikipedia.org/wiki/File:Mandel_zoom_00_mandelbrot_set.jpg
@@ -156,7 +156,7 @@ public class Fractal extends View {
     };
     int color[] = new int[3]; // For red, green, and blue.
     int n = 14;
-		
+    
     for (int i = 0; i < n; ++i) {
       table[cp[i][0]] = Color.rgb(cp[i][1], cp[i][2], cp[i][3]);
     }
@@ -179,7 +179,7 @@ public class Fractal extends View {
     float x = event.getX(0) - event.getX(1);
     float y = event.getY(0) - event.getY(1);
     return FloatMath.sqrt(x * x + y * y);
-  }	
+  }  
 
   public native double mandelbrot(double x0, double y0, int interationMax, 
                                   double bailout, double il, double lp);
