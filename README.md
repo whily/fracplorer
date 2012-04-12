@@ -23,7 +23,8 @@ The following tools are needed to build Fracplorer from source:
   Note that JDK is preinstalled on Mac OS X and available via package manager
   on many Linux systems. 
 * Android SDK r16 and NDK r7.
-* [Inkscape](http://inkscape.org) to generate icons.
+* [Inkscape](http://inkscape.org) and [ImageMagick](http://www.imagemagick.org)
+  to generate icons.
 
 Fracplorer is built using [Ant](http://en.wikipedia.org/wiki/Apache_Ant)
 instead of IDEs like Eclipse. Type the following commands at the
