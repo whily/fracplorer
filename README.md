@@ -1,7 +1,7 @@
 Fracplorer
 ==========
 
-Fracplorer is an Androd application to explore Fractal images (mainly
+Fracplorer is an Android application to explore Fractal images (mainly
 [Mandelbrot set](http://en.wikipedia.org/wiki/Mandelbrot_set)) for
 now.  It is currently under development.
 
@@ -22,13 +22,13 @@ The following tools are needed to build Fracplorer from source:
 * JDK version 6/7 from <http://www.java.com> if Java is not available. 
   Note that JDK is preinstalled on Mac OS X and available via package manager
   on many Linux systems. 
-* Android SDK r16 and NDK r7.
+* Android SDK r19 and NDK r7.
 * [Inkscape](http://inkscape.org) and [ImageMagick](http://www.imagemagick.org)
   to generate icons.
 
-Fracplorer is built using [Ant](http://en.wikipedia.org/wiki/Apache_Ant)
-instead of IDEs like Eclipse. Type the following commands at the
-project directory just checked out (assuming debug version):
+Fracplorer can be built with either [Ant] (http://en.wikipedia.org/wiki/Apache_Ant)
+or Eclipse. For Eclipse, simply import the project. For Ant, type the following
+commands at the project directory checked out (assuming debug version):
 
 1. android update project -p .
 2. ./genart
