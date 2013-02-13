@@ -116,11 +116,11 @@ public class Fractal extends View {
     
     // Screen coordinate with (0,0) as (left, top) while (width - 1, height - 1) as 
     // (right, bottom).
-    //rectangle(0, 0, width - 1, height - 1, colors);
+    rectangle(0, 0, width - 1, height - 1, colors);
     
     for (int i = 0; i < width; ++i) {
       for (int j = 0; j < height; ++j) {
-        colors[j * width + i] = color(iteration(i, j));
+        //colors[j * width + i] = color(iteration(i, j));
       }
     }
     
@@ -206,48 +206,61 @@ public class Fractal extends View {
   // We then recursively check by dividing the rectangle into four 
   // pieces.
   private void rectangle(int left, int top, int right, int bottom, int[] colors) {
+  	// Nothing to draw.
   	if ((left > right) || (top > bottom)) {
   		return;
   	}
+  	
+  	// One line or two lines to draw.
+  	if ((right <= left + 1) || (bottom <= top + 1)) {
+  		for (int i = left; i <= right; ++i) {
+  			for (int j = top; j <= bottom; ++j) {
+  				colors[j * width + i] = color(iteration(i, j));
+  			}
+  		}
+  		return;
+  	}
+  	
   	boolean allBlack = true; // TRUE if all edges are black.
-  	// Draw top edge (including vertices).
+  	// Draw top & bottom edges (including vertices).
   	for (int i = left; i <= right; ++i) {
   		double iteration = iteration(i, top);
   		if (!blackIteration(iteration)) {
   			allBlack = false;
   		}
   		colors[top * width + i] = color(iteration);
+  		if (bottom > top) {
+  			iteration = iteration(i, bottom);
+    		if (!blackIteration(iteration)) {
+    			allBlack = false;
+    		}
+    		colors[bottom * width + i] = color(iteration);
+  		}
   	}
-  	// Draw left edge.
+  	// Draw left & right edges.
   	for (int j = top + 1; j <= bottom - 1; ++j) {
   		double iteration = iteration(left, j);
   		if (!blackIteration(iteration)) {
   			allBlack = false;
   		}
   		colors[j * width + left] = color(iteration);
+  		if (bottom > top) {
+  			iteration = iteration(right, j);
+    		if (!blackIteration(iteration)) {
+    			allBlack = false;
+    		}
+    		colors[j * width + right] = color(iteration);
+  		}
   	}  	
-  	// Draw right edge.
-  	for (int j = top + 1; j <= bottom - 1; ++j) {
-  		double iteration = iteration(right, j);
-  		if (!blackIteration(iteration)) {
-  			allBlack = false;
-  		}
-  		colors[j * width + right] = color(iteration);
-  	}   	
-  	// Draw bottom edge (including vertices).
-  	for (int i = left; i <= right; ++i) {
-  		double iteration = iteration(i, bottom);
-  		if (!blackIteration(iteration)) {
-  			allBlack = false;
-  		}
-  		colors[bottom * width + i] = color(iteration);
-  	}
   	
   	if (allBlack) {
   		for (int i = left + 1; i < right; ++i) {
   			for (int j = top + 1; j < bottom; ++ j) {
   				colors[j * width + i] = black();
   			}
+  		}
+  		if ((right >= left + 10) && (bottom >= top + 10)) {
+        Log.v(TAG, "All black (" + (right - left) + "," + (bottom - top) + ")");
   		}
   	} else {
   		// Split along the longer edge.
