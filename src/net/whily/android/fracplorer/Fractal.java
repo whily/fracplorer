@@ -203,8 +203,7 @@ public class Fractal extends View {
   
   // We assume that if the edges of a rectangle are all black, 
   // then the content is all black (not sure whether this is true...)
-  // We then recursively check by dividing the rectangle into four 
-  // pieces.
+  // We then recursively check by dividing the rectangle into halves.
   private void rectangle(int left, int top, int right, int bottom, int[] colors) {
   	// Nothing to draw.
   	if ((left > right) || (top > bottom)) {
@@ -222,36 +221,38 @@ public class Fractal extends View {
   	}
   	
   	boolean allBlack = true; // TRUE if all edges are black.
-  	// Draw top & bottom edges (including vertices).
+  	// Draw top edge (including vertices).
   	for (int i = left; i <= right; ++i) {
   		double iteration = iteration(i, top);
   		if (!blackIteration(iteration)) {
   			allBlack = false;
   		}
   		colors[top * width + i] = color(iteration);
-  		if (bottom > top) {
-  			iteration = iteration(i, bottom);
-    		if (!blackIteration(iteration)) {
-    			allBlack = false;
-    		}
-    		colors[bottom * width + i] = color(iteration);
-  		}
   	}
-  	// Draw left & right edges.
+  	// Draw bottom edge (including vertices).
+  	for (int i = left; i <= right; ++i) {
+  		double iteration = iteration(i, bottom);
+  		if (!blackIteration(iteration)) {
+  			allBlack = false;
+  		}
+  		colors[bottom * width + i] = color(iteration);
+  	}  	
+  	// Draw left edge.
   	for (int j = top + 1; j <= bottom - 1; ++j) {
   		double iteration = iteration(left, j);
   		if (!blackIteration(iteration)) {
   			allBlack = false;
   		}
   		colors[j * width + left] = color(iteration);
-  		if (bottom > top) {
-  			iteration = iteration(right, j);
-    		if (!blackIteration(iteration)) {
-    			allBlack = false;
-    		}
-    		colors[j * width + right] = color(iteration);
-  		}
   	}  	
+  	// Draw right edge.
+  	for (int j = top + 1; j <= bottom - 1; ++j) {
+  		double iteration = iteration(right, j);
+  		if (!blackIteration(iteration)) {
+  			allBlack = false;
+  		}
+  		colors[j * width + right] = color(iteration);
+  	}  	  	
   	
   	if (allBlack) {
   		for (int i = left + 1; i < right; ++i) {
