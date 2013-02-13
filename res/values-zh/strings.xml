@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">Fracplorer</string>
-  <string name="about">About</string>
-  <string name="settings">Settings</string>
+  <string name="about">关于</string>  
+  <string name="settings">设置</string>   
 </resources>

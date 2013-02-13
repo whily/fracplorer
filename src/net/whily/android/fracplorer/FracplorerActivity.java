@@ -11,8 +11,10 @@
 
 package net.whily.android.fracplorer;
 
+import net.whily.android.fracplorer.R;
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -27,5 +29,11 @@ public class FracplorerActivity extends Activity {
                          WindowManager.LayoutParams.FLAG_FULLSCREEN);
     
     setContentView(R.layout.main);
+  }
+  
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.frac_options, menu);
+    return true;
   }
 }
