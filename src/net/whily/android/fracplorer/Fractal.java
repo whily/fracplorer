@@ -49,6 +49,7 @@ public class Fractal extends View {
     appContext = context; 
 
     cores = Runtime.getRuntime().availableProcessors();
+    setupColorMapping();
   }
 
   @Override
@@ -109,9 +110,7 @@ public class Fractal extends View {
     yMax = yCenter + deltaY / 2.0;
     pixelX = deltaX / width;
     pixelY = deltaY / height;
-
-    setupColorMapping();
-    
+  
     long now = System.currentTimeMillis();
     
     // Screen coordinate with (0,0) as (left, top) while (width - 1, height - 1) as 
@@ -140,24 +139,24 @@ public class Fractal extends View {
   // Return the iteration count.
   private double iteration(int screenX, int screenY) {
     return mandelbrot(xMin + pixelX * screenX, yMax - pixelY * screenY, 
-    									iterationMax, bailout, il, lp);
+                                        iterationMax, bailout, il, lp);
   }
   
   // Return black color value.
   private int black() {
-  	return Color.rgb(0, 0, 0);
+      return Color.rgb(0, 0, 0);
   }
   
   // Return true if iteration represents black color.
   private boolean blackIteration(double iteration) {
-  	return iteration < 0;
+      return iteration < 0;
   }
                          
   // Return color from iteration value.
   private int color(double iteration) {
-  	return blackIteration(iteration) 
-  				 ? black()
-        	 : table[mod((int)(45.0 * Math.log(iteration)), 400)]; 
+      return blackIteration(iteration) 
+                   ? black()
+             : table[mod((int)(45.0 * Math.log(iteration)), 400)]; 
   }
    
   private void setupColorMapping() {
@@ -205,74 +204,74 @@ public class Fractal extends View {
   // then the content is all black (not sure whether this is true...)
   // We then recursively check by dividing the rectangle into halves.
   private void rectangle(int left, int top, int right, int bottom, int[] colors) {
-  	// Nothing to draw.
-  	if ((left > right) || (top > bottom)) {
-  		return;
-  	}
-  	
-  	// One line or two lines to draw.
-  	if ((right <= left + 1) || (bottom <= top + 1)) {
-  		for (int i = left; i <= right; ++i) {
-  			for (int j = top; j <= bottom; ++j) {
-  				colors[j * width + i] = color(iteration(i, j));
-  			}
-  		}
-  		return;
-  	}
-  	
-  	boolean allBlack = true; // TRUE if all edges are black.
-  	// Draw top edge (including vertices).
-  	for (int i = left; i <= right; ++i) {
-  		double iteration = iteration(i, top);
-  		if (!blackIteration(iteration)) {
-  			allBlack = false;
-  		}
-  		colors[top * width + i] = color(iteration);
-  	}
-  	// Draw bottom edge (including vertices).
-  	for (int i = left; i <= right; ++i) {
-  		double iteration = iteration(i, bottom);
-  		if (!blackIteration(iteration)) {
-  			allBlack = false;
-  		}
-  		colors[bottom * width + i] = color(iteration);
-  	}  	
-  	// Draw left edge.
-  	for (int j = top + 1; j <= bottom - 1; ++j) {
-  		double iteration = iteration(left, j);
-  		if (!blackIteration(iteration)) {
-  			allBlack = false;
-  		}
-  		colors[j * width + left] = color(iteration);
-  	}  	
-  	// Draw right edge.
-  	for (int j = top + 1; j <= bottom - 1; ++j) {
-  		double iteration = iteration(right, j);
-  		if (!blackIteration(iteration)) {
-  			allBlack = false;
-  		}
-  		colors[j * width + right] = color(iteration);
-  	}  	  	
-  	
-  	if (allBlack) {
-  		for (int i = left + 1; i < right; ++i) {
-  			for (int j = top + 1; j < bottom; ++ j) {
-  				colors[j * width + i] = black();
-  			}
-  		}
-  		if ((right >= left + 10) && (bottom >= top + 10)) {
+      // Nothing to draw.
+      if ((left > right) || (top > bottom)) {
+          return;
+      }
+      
+      // One line or two lines to draw.
+      if ((right <= left + 1) || (bottom <= top + 1)) {
+          for (int i = left; i <= right; ++i) {
+              for (int j = top; j <= bottom; ++j) {
+                  colors[j * width + i] = color(iteration(i, j));
+              }
+          }
+          return;
+      }
+      
+      boolean allBlack = true; // TRUE if all edges are black.
+      // Draw top edge (including vertices).
+      for (int i = left; i <= right; ++i) {
+          double iteration = iteration(i, top);
+          if (!blackIteration(iteration)) {
+              allBlack = false;
+          }
+          colors[top * width + i] = color(iteration);
+      }
+      // Draw bottom edge (including vertices).
+      for (int i = left; i <= right; ++i) {
+          double iteration = iteration(i, bottom);
+          if (!blackIteration(iteration)) {
+              allBlack = false;
+          }
+          colors[bottom * width + i] = color(iteration);
+      }      
+      // Draw left edge.
+      for (int j = top + 1; j <= bottom - 1; ++j) {
+          double iteration = iteration(left, j);
+          if (!blackIteration(iteration)) {
+              allBlack = false;
+          }
+          colors[j * width + left] = color(iteration);
+      }      
+      // Draw right edge.
+      for (int j = top + 1; j <= bottom - 1; ++j) {
+          double iteration = iteration(right, j);
+          if (!blackIteration(iteration)) {
+              allBlack = false;
+          }
+          colors[j * width + right] = color(iteration);
+      }            
+      
+      if (allBlack) {
+          for (int i = left + 1; i < right; ++i) {
+              for (int j = top + 1; j < bottom; ++ j) {
+                  colors[j * width + i] = black();
+              }
+          }
+          if ((right >= left + 10) && (bottom >= top + 10)) {
         Log.v(TAG, "All black (" + (right - left) + "," + (bottom - top) + ")");
-  		}
-  	} else {
-  		// Split along the longer edge.
-  		if (right - left > bottom - top) {
-  			rectangle(left + 1, top + 1, (left + right) / 2, bottom - 1, colors);
-  			rectangle((left + right) / 2 + 1, top + 1, right - 1, bottom - 1, colors);
-  		} else {
-  			rectangle(left + 1, top + 1, right - 1, (top + bottom) / 2, colors);
-  			rectangle(left + 1, (top + bottom) / 2 + 1, right - 1, bottom - 1, colors);
-  		}
-  	}
+          }
+      } else {
+          // Split along the longer edge.
+          if (right - left > bottom - top) {
+              rectangle(left + 1, top + 1, (left + right) / 2, bottom - 1, colors);
+              rectangle((left + right) / 2 + 1, top + 1, right - 1, bottom - 1, colors);
+          } else {
+              rectangle(left + 1, top + 1, right - 1, (top + bottom) / 2, colors);
+              rectangle(left + 1, (top + bottom) / 2 + 1, right - 1, bottom - 1, colors);
+          }
+      }
   }
  
   // Calculate how far two fingers are.
