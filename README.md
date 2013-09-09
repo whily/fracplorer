@@ -2,8 +2,8 @@ Fracplorer
 ==========
 
 Fracplorer is an Android application to explore Fractal images (mainly
-[Mandelbrot set](http://en.wikipedia.org/wiki/Mandelbrot_set)) for
-now.  It is currently under development.
+[Mandelbrot set](http://en.wikipedia.org/wiki/Mandelbrot_set) for
+now).  It is currently under development.
 
 For more information about Fracplorer, please go to
   <https://github.com/whily/fracplorer>
